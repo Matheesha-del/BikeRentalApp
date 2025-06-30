@@ -1,5 +1,5 @@
 import { Stack, useLocalSearchParams } from 'expo-router';
-
+import Map from '~/components/Map'
 import { Container } from '~/components/Container';
 import { ScreenContent } from '~/components/ScreenContent';
 
@@ -9,9 +9,7 @@ export default function Details() {
   return (
     <>
       <Stack.Screen options={{ title: 'Details' }} />
-      <Container>
-        <ScreenContent path="screens/details.tsx" title={`Showing details for user ${name}`} />
-      </Container>
+      <Map />
     </>
   );
 }
