@@ -1,3 +1,4 @@
+
 import Mapbox, {
   Camera,
   LocationPuck,
@@ -7,10 +8,12 @@ import Mapbox, {
   SymbolLayer,
   Images
 } from '@rnmapbox/maps';
+//import MapboxGL from '@rnmapbox/maps';
 import {featureCollection, point } from '@turf/helpers';
 
 
 import pin from '~/assets/pin.png';
+
 import bicycles from '~/data/bicycles.json';
 
 Mapbox.setAccessToken(process.env.EXPO_PUBLIC_MAPBOX_KEY || '');
