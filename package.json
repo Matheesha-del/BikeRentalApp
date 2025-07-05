@@ -13,6 +13,9 @@
   "dependencies": {
     "@expo/vector-icons": "^14.0.0",
     "@gorhom/bottom-sheet": "5",
+    "@react-native-async-storage/async-storage": "2.1.2",
+    "@react-native-firebase/app": "^22.2.1",
+    "@react-native-firebase/auth": "^22.2.1",
     "@react-navigation/native": "^7.0.3",
     "@rnmapbox/maps": "^10.1.39",
     "expo": "^53.0.13",
@@ -24,7 +27,7 @@
     "expo-status-bar": "~2.2.3",
     "expo-system-ui": "~5.0.6",
     "expo-web-browser": "~14.2.0",
-    "firebase": "^10.5.2",
+    "firebase": "^10.14.1",
     "mapbox-gl": "^2.15.0",
     "react": "19.0.0",
     "react-dom": "19.0.0",
