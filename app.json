@@ -12,6 +12,8 @@
     "plugins": [
       "expo-router",
       "expo-web-browser",
+      "@react-native-firebase/app",
+      "@react-native-firebase/auth",
       [
         "@rnmapbox/maps",
         {
@@ -45,6 +47,7 @@
       "supportsTablet": true
     },
     "android": {
+      "googleServicesFile": "./google-services.json",
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"

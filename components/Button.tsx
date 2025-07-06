@@ -18,7 +18,7 @@ Button.displayName = 'Button';
 const styles = StyleSheet.create({
   button: {
     alignItems: 'center',
-    backgroundColor: '#6366F1',
+    backgroundColor: '#0093FF',
     borderRadius: 24,
     elevation: 5,
     flexDirection: 'row',

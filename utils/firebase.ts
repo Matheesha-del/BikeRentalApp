@@ -19,9 +19,10 @@ const firebaseConfig = {
   //measurementId: process.env.EXPO_PUBLIC_FIREBASE_MEASUREMENT_ID,
 };
 
-export const FIREBASE_app = initializeApp(firebaseConfig);
-export const FIREBASE_auth = getAuth(FIREBASE_app);
-// For more information on how to access Firebase in your project,
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+
+export {auth};// For more information on how to access Firebase in your project,
 // see the Firebase documentation: https://firebase.google.com/docs/web/setup#access-firebase
 
 

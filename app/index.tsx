@@ -1,17 +1,17 @@
 import { Stack, Link } from 'expo-router';
 import React, { useState } from 'react';
 import { TextInput, View, Text, StyleSheet, Alert, Image } from 'react-native';
-import { FIREBASE_auth } from '~/utils/firebase';
-import { NavigationContainer } from '@react-navigation/native';
-
+import { getAuth, signInWithEmailAndPassword , createUserWithEmailAndPassword } from "firebase/auth";
+import { auth } from '~/utils/firebase';
 
 import { Button } from '~/components/Button';
 import { Container } from '~/components/Container';
-import { signInWithEmailAndPassword } from 'firebase/auth';
+import { useRouter } from 'expo-router';
 
 export default function Login() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const router = useRouter();
 
   const handleLogin = async() => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -19,14 +19,15 @@ export default function Login() {
       Alert.alert('Invalid Email', 'Please enter a valid email address.');
       return;
     }
-  //  try {
-  //   const userCredential = await signInWithEmailAndPassword( FIREBASE_auth, email, password)
-  //   const user = userCredential.user;
-  //   Alert.alert('Login Successful', `Welcome back, ${user.email}!`);
-  //  }catch (error:any) {
-  //     Alert.alert('Login Failed', 'No user is logged in. Please check your credentials.');
-  //     }
-    // Replace this with your actual auth logic 
+   
+    try {
+      const userCredential = await signInWithEmailAndPassword(auth, email, password);
+      const user = userCredential.user;
+      Alert.alert('Login Successful', `Welcome back, ${user.email}!`);
+      router.replace('/home'); 
+    } catch (error: any) {
+      Alert.alert('Login Failed', error.message);
+    }
   };
 
   return (
@@ -56,13 +57,13 @@ export default function Login() {
             value={password}
             onChangeText={setPassword}
           />
-          <View>  
-              <Text style={{ fontSize: 15}}>Don't have an account? Sign Up. </Text>
-            </View>
-          <Link href="/home" style={{ marginTop: 10 }} asChild  >
+          
+          
           <Button title="Login" onPress={handleLogin} />
-          </Link>
-          <Button title="Sign Up" onPress={() => Alert.alert('Sign Up', 'Sign Up functionality not implemented yet.')} />
+
+          <Text style={{ fontSize: 15}}>Don't have an account? Sign Up. </Text>
+           
+          <Button title="Sign Up" onPress={() => router.push('/signup')} />
         </View>
       </Container>
     </>
