@@ -1,6 +1,6 @@
 import { Stack, Link } from 'expo-router';
 import React, { useState } from 'react';
-import { TextInput, View, Text, StyleSheet, Alert } from 'react-native';
+import { TextInput, View, Text, StyleSheet, Alert, Image } from 'react-native';
 import { FIREBASE_auth } from '~/utils/firebase';
 import { NavigationContainer } from '@react-navigation/native';
 
@@ -34,8 +34,11 @@ export default function Login() {
       <Stack.Screen options={{ title: 'Login' }} />
       <Container>
           <View style={styles.inputContainer}>
+            <View style={{ alignItems: 'center', marginBottom: 20 }}>
+              <Image source={require('~/assets/pin.png')} style={{ width: 100, height: 100 }} />
+            </View>
             <View>  
-              <Text style={{ fontSize: 24, fontWeight: 'bold' }}>Welcome to Bike Rental App. Please Login/Sign in to continue.</Text>
+              <Text style={{ fontSize: 28, fontWeight: 'bold'}}>Welcome to Bike Rental App. </Text>
             </View>
           <TextInput
             style={styles.input}
@@ -53,6 +56,9 @@ export default function Login() {
             value={password}
             onChangeText={setPassword}
           />
+          <View>  
+              <Text style={{ fontSize: 15}}>Don't have an account? Sign Up. </Text>
+            </View>
           <Link href="/home" style={{ marginTop: 10 }} asChild  >
           <Button title="Login" onPress={handleLogin} />
           </Link>
@@ -75,5 +81,6 @@ const styles = StyleSheet.create({
     borderRadius: 6,
     padding: 10,
     fontSize: 16,
+    backgroundColor: 'white',
   },
 });
