@@ -21,7 +21,7 @@ export default function Map(){
     const [bikePoints, setBikePoints] = useState<any[]>([]);
 
     useEffect(() => {
-        const locationRef = ref(database,);
+        const locationRef = ref(database, 'gps_data');
         const unsubscribe = onValue(locationRef, (snapshot) => {
             const data = snapshot.val();
             if (data) {
