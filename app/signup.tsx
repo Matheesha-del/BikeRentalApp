@@ -26,7 +26,7 @@ export default function Signup() {
       const userCredential = await createUserWithEmailAndPassword(auth, email, password);
       const user = userCredential.user;
       Alert.alert('Success', `Account created for ${user.email}`);
-      router.push('/home');
+      router.push('./details');
     } catch (error: any) {
       Alert.alert('Signup Error', error.message);
     }

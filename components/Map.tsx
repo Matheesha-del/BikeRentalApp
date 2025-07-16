@@ -3,11 +3,10 @@ import Mapbox, {
   Camera,
   LocationPuck,
   MapView,
-  ShapeSource,
-  CircleLayer,
-  SymbolLayer,
-  Images
 } from '@rnmapbox/maps';
+import LineRoute from './LineRoute';
+import { useBicycle } from '~/providers/BicycleProvider';
+import BicycleMarkers from './BicyclesMarkers'
 import {featureCollection, point } from '@turf/helpers';
 import { database } from '~/utils/firebase';
 import { onValue, ref, update } from 'firebase/database';
@@ -19,6 +18,9 @@ Mapbox.setAccessToken(process.env.EXPO_PUBLIC_MAPBOX_KEY || '');
 
 
 export default function Map(){
+    const {directionCoordinates, routeTime} = useBicycle();
+    console.log('Time: ', routeTime);
+
     const [bikePoints, setBikePoints] = useState<any[]>([]);
 
     useEffect(() => {
@@ -80,45 +82,9 @@ export default function Map(){
             <Camera followZoomLevel={16} followUserLocation />
             <LocationPuck puckBearingEnabled puckBearing="heading" pulsing={{ isEnabled: true }} />
 
-            <ShapeSource 
-                id="bicycles" cluster 
-                shape={featureCollection(bikePoints)} 
-                onPress={(e) => console.log(JSON.stringify(e, null, 2))}>
-                <SymbolLayer
-                    id="clusters-count"
-                    style={{
-                        textField: ['get', 'point_count'],
-                        textSize: 18,
-                        textColor: '#ffffff',
-                        textPitchAlignment: 'map',
-                    }}
-                />
+        <BicycleMarkers/>
 
-                <CircleLayer
-                    id="clusters"
-                    belowLayerID="clusters-count"
-                    filter={['has', 'point_count']}
-                    style={{
-                        circleColor: '#59e8f1',
-                        circlePitchAlignment: 'map',
-                        circleRadius: 20,
-                        circleOpacity: 1,
-                        circleStrokeWidth: 2,
-                        circleStrokeColor: 'white',
-                    }}
-                />
-                <SymbolLayer
-                    id="bicycle-icons"
-                    filter={['!', ['has', 'point_count']]}
-                    style={{
-                        iconImage: 'pin',
-                        iconSize: 0.1,
-                        iconAllowOverlap: true,
-                        iconAnchor: 'bottom'
-                    }}
-                />
-                <Images images={{ pin }} />
-            </ShapeSource>
-        </MapView>
+        {directionCoordinates && <LineRoute coordinates={directionCoordinates} /> }
+    </MapView>
     );
 }

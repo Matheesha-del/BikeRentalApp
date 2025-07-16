@@ -7,7 +7,7 @@ type ButtonProps = {
 
 export const Button = forwardRef<View, ButtonProps>(({ title, ...touchableProps }, ref) => {
   return (
-    <TouchableOpacity ref={ref} {...touchableProps} style={[styles.button, touchableProps.style]}>
+    <TouchableOpacity ref={ref} {...touchableProps} style={[styles.button,{backgroundColor:touchableProps.disabled ? 'gray': '#0ebdc0'}]}>
       <Text style={styles.buttonText}>{title}</Text>
     </TouchableOpacity>
   );
@@ -18,7 +18,7 @@ Button.displayName = 'Button';
 const styles = StyleSheet.create({
   button: {
     alignItems: 'center',
-    backgroundColor: '#0093FF',
+    backgroundColor: '#0ebdc0',
     borderRadius: 24,
     elevation: 5,
     flexDirection: 'row',

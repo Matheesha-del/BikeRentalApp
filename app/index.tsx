@@ -8,6 +8,7 @@ import { Button } from '~/components/Button';
 import { Container } from '~/components/Container';
 import { useRouter } from 'expo-router';
 
+
 export default function Login() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -24,7 +25,7 @@ export default function Login() {
       const userCredential = await signInWithEmailAndPassword(auth, email, password);
       const user = userCredential.user;
       Alert.alert('Login Successful', `Welcome back, ${user.email}!`);
-      router.replace('/home'); 
+      router.replace('/details'); 
     } catch (error: any) {
       Alert.alert('Login Failed', error.message);
     }
@@ -63,7 +64,7 @@ export default function Login() {
 
           <Text style={{ fontSize: 15}}>Don't have an account? Sign Up. </Text>
            
-          <Button title="Sign Up" onPress={() => router.push('/signup')} />
+          <Button title="Sign Up" onPress={() => router.push('./signup')} />
         </View>
       </Container>
     </>
