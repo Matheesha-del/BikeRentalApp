@@ -12,11 +12,14 @@
   },
   "dependencies": {
     "@expo/vector-icons": "^14.0.0",
+    "@gorhom/bottom-sheet": "5",
     "@react-navigation/native": "^7.0.3",
     "@rnmapbox/maps": "^10.1.39",
     "expo": "^53.0.13",
     "expo-constants": "~17.1.4",
+    "expo-dev-client": "~5.2.2",
     "expo-linking": "~7.1.4",
+    "expo-location": "~18.1.5",
     "expo-router": "~5.1.1",
     "expo-status-bar": "~2.2.3",
     "expo-system-ui": "~5.0.6",
@@ -29,10 +32,7 @@
     "react-native-reanimated": "~3.17.4",
     "react-native-safe-area-context": "5.4.0",
     "react-native-screens": "~4.11.1",
-    "react-native-web": "^0.20.0",
-    "expo-dev-client": "~5.2.2",
-    "expo-location": "~18.1.5",
-    "@gorhom/bottom-sheet": "5"
+    "react-native-web": "^0.20.0"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",
