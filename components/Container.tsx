@@ -8,5 +8,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 24,
+    backgroundColor: 'skyblue',
+    justifyContent: 'center'
   },
 });
