@@ -19,6 +19,7 @@
     "@react-navigation/native": "^7.1.14",
     "@react-navigation/native-stack": "^7.3.21",
     "@rnmapbox/maps": "^10.1.39",
+    "@stripe/stripe-react-native": "0.45.0",
     "expo": "^53.0.13",
     "expo-constants": "~17.1.4",
     "expo-dev-client": "~5.2.2",
@@ -38,7 +39,6 @@
     "react-native-safe-area-context": "5.4.0",
     "react-native-screens": "~4.11.1",
     "react-native-web": "^0.20.0"
-    
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",
