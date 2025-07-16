@@ -1,30 +1,51 @@
+import { useEffect, useState } from 'react';
 import { ShapeSource, Images, CircleLayer, SymbolLayer } from "@rnmapbox/maps";
 import { OnPressEvent } from '@rnmapbox/maps/lib/typescript/src/types/OnPressEvent';
 import pin from '~/assets/pin.png';
-import bicycles from '~/data/bicycles.json';
-import {featureCollection, point } from '@turf/helpers';
+import { featureCollection, point } from '@turf/helpers';
 import { useBicycle } from '~/providers/BicycleProvider';
+import { database } from '~/utils/firebase'; 
+import { onValue, ref } from 'firebase/database';
 
 export default function BicycleMarkers() {
-    const { setSelectedBicycle} = useBicycle();
-    const points =bicycles.map((bicycle) => point([bicycle.longitude, bicycle.latitude ], {bicycle}));
+    const { setSelectedBicycle } = useBicycle();
+    const [features, setFeatures] = useState<GeoJSON.Feature<GeoJSON.Point, any>[]>([]);
 
-    const onPointPress = async (event : OnPressEvent) => {
-        
-        if (event.features[0].properties.bicycle) {
-            setSelectedBicycle(event.features[0].properties.bicycle);
+    useEffect(() => {
+        const bikesRef = ref(database, 'gps_data');
+        const unsubscribe = onValue(bikesRef, (snapshot) => {
+            const data = snapshot.val();
+            if (data) {
+                const points = Object.keys(data).map((key) => {
+                    const bike = data[key];
+                    return point([bike.longitude, bike.latitude], { bicycle: { ...bike, id: key } });
+                });
+                setFeatures(points);
+            }
+        });
+
+        return () => unsubscribe();
+    }, []);
+
+    const onPointPress = async (event: OnPressEvent) => {
+        if (
+            event.features &&
+            event.features[0] &&
+            event.features[0].properties &&
+            event.features[0].properties.bicycle
+        ) {
+            const raw = event.features[0].properties.bicycle;
+            setSelectedBicycle(typeof raw === 'string' ? JSON.parse(raw) : raw);
         }
-        
-
     };
 
-
-    return(
-        <ShapeSource 
-            id="bicycles" 
-            cluster 
-            shape={featureCollection(points)} 
-            onPress={onPointPress}>
+    return (
+        <ShapeSource
+            id="bicycles"
+            cluster
+            shape={featureCollection(features)}
+            onPress={onPointPress}
+        >
             <SymbolLayer
                 id="clusters-count"
                 style={{
@@ -34,8 +55,6 @@ export default function BicycleMarkers() {
                     textPitchAlignment: 'map',
                 }}
             />
-
-
             <CircleLayer
                 id="clusters"
                 belowLayerID="clusters-count"
@@ -56,10 +75,10 @@ export default function BicycleMarkers() {
                     iconImage: 'pin',
                     iconSize: 0.1,
                     iconAllowOverlap: true,
-                    iconAnchor: 'bottom'
+                    iconAnchor: 'bottom',
                 }}
             />
             <Images images={{ pin }} />
         </ShapeSource>
-    )
+    );
 }

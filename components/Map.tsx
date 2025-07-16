@@ -21,36 +21,36 @@ export default function Map(){
     const {directionCoordinates, routeTime} = useBicycle();
     console.log('Time: ', routeTime);
 
-    const [bikePoints, setBikePoints] = useState<any[]>([]);
+   // const [bikePoints, setBikePoints] = useState<any[]>([]);
 
-    useEffect(() => {
-        const gpsQuery = query(
-        ref(database, 'gps_data'),
-        orderByChild('timestamp'),
-        limitToLast(1)
-    );
+    // useEffect(() => {
+    //     const gpsQuery = query(
+    //     ref(database, 'gps_data'),
+    //     orderByChild('timestamp'),
+    //     limitToLast(1)
+    // );
 
-        const unsubscribe = onValue(gpsQuery, (snapshot) => {
-            const data = snapshot.val();
-            console.log("🔥 Firebase response:", data);
+    //     const unsubscribe = onValue(gpsQuery, (snapshot) => {
+    //         const data = snapshot.val();
+    //         console.log("🔥 Firebase response:", data);
 
-            if (data) {
-            const [key, latestRaw] = Object.entries(data)[0];
-            const latest = latestRaw as { latitude?: number; longitude?: number };
+    //         if (data) {
+    //         const [key, latestRaw] = Object.entries(data)[0];
+    //         const latest = latestRaw as { latitude?: number; longitude?: number };
 
-            if (latest.latitude && latest.longitude) {
-                const latestPoint = point([latest.longitude, latest.latitude], { id: 'bike01' });
-                setBikePoints([latestPoint]);
-            } else {
-                console.warn("⚠️ Data exists but missing lat/lon:", latest);
-            }
-            } else {
-            console.warn("⚠️ No data received from Firebase.");
-            }
-        });
+    //         if (latest.latitude && latest.longitude) {
+    //             const latestPoint = point([latest.longitude, latest.latitude], { id: 'bike01' });
+    //             setBikePoints([latestPoint]);
+    //         } else {
+    //             console.warn("⚠️ Data exists but missing lat/lon:", latest);
+    //         }
+    //         } else {
+    //         console.warn("⚠️ No data received from Firebase.");
+    //         }
+    //     });
 
-        return () => unsubscribe();
-        }, []);
+    //     return () => unsubscribe();
+    //     }, []);
 
 
     // useEffect(() => {
@@ -72,7 +72,7 @@ export default function Map(){
     //           setBikePoints(points);
     //           }});
 
-    //     // Cleanup subscription on unmount
+        // Cleanup subscription on unmount
     //     return () => unsubscribe();
     // }, []);
 
