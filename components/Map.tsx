@@ -7,11 +7,6 @@ import Mapbox, {
 import LineRoute from './LineRoute';
 import { useBicycle } from '~/providers/BicycleProvider';
 import BicycleMarkers from './BicyclesMarkers'
-import {featureCollection, point } from '@turf/helpers';
-import { database } from '~/utils/firebase';
-import { onValue, ref, update } from 'firebase/database';
-import pin from '~/assets/pin.png';
-import { query, orderByChild, limitToLast } from "firebase/database";
 
 
 Mapbox.setAccessToken(process.env.EXPO_PUBLIC_MAPBOX_KEY || '');
