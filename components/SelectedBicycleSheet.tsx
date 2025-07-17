@@ -60,7 +60,7 @@ export default function SelectedBicycleSheet() {
 
   // Track elapsed time
   useEffect(() => {
-    let timer: NodeJS.Timer;
+    let timer: ReturnType<typeof setInterval>;
     if (journeyStarted && startTime) {
       timer = setInterval(() => {
         setElapsedTime(Math.floor((Date.now() - startTime.getTime()) / 1000));
@@ -101,7 +101,7 @@ export default function SelectedBicycleSheet() {
                 <View style={{ flexDirection: 'row', alignItems: 'center', gap: 5 }}>
                   <Entypo name="time-slot" size={24} color="#59e8f1" />
                   <Text style={{ color: 'white', fontSize: 16 }}>
-                    {(duration / 60)?.toFixed(1) ?? '...'}min
+                    {duration != null ? (duration / 60).toFixed(1) : '...'}min
                   </Text>
                 </View>
               </View>

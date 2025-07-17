@@ -1,4 +1,3 @@
-import React, { useEffect, useState } from 'react';
 import Mapbox, {
   Camera,
   LocationPuck,
@@ -7,6 +6,8 @@ import Mapbox, {
 import LineRoute from './LineRoute';
 import { useBicycle } from '~/providers/BicycleProvider';
 import BicycleMarkers from './BicyclesMarkers'
+import * as Location from 'expo-location';
+import { useEffect } from 'react';
 
 
 Mapbox.setAccessToken(process.env.EXPO_PUBLIC_MAPBOX_KEY || '');
@@ -16,6 +17,14 @@ export default function Map(){
     const {directionCoordinates, routeTime} = useBicycle();
     console.log('Time: ', routeTime);
 
+    useEffect(() => {
+    (async () => {
+        const { status } = await Location.requestForegroundPermissionsAsync();
+        if (status !== 'granted') {
+        console.warn('Permission to access location was denied');
+        }
+    })();
+    }, []);
       
     return (
         <MapView style={{flex:1}} styleURL="mapbox://styles/mapbox/navigation-night-v1">
