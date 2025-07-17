@@ -6,7 +6,7 @@ import { BicycleProvider } from '~/providers/BicycleProvider';
 
 import Mapbox from '@rnmapbox/maps';
 
-Mapbox.setAccessToken('pk.eyJ1Ijoia2lzYWxpdCIsImEiOiJjbWNvYjJicHcxNjR0MmpxMDRlcHFsdTQ5In0.xiEjK5aFmYvv9Nleb3OPzg');
+Mapbox.setAccessToken(process.env.EXPO_PUBLIC_MAPBOX_KEY || '');
 
 export default function Layout() {
   return (
