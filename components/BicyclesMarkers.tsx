@@ -77,8 +77,10 @@ export default function BicycleMarkers() {
                     iconAllowOverlap: true,
                     iconAnchor: 'bottom',
                 }}
+              
             />
             <Images images={{ pin }} />
-        </ShapeSource>
+  
+        </ShapeSource>        
     );
 }
