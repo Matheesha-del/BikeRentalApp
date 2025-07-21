@@ -124,7 +124,31 @@ export default function SelectedBicycleSheet() {
       </Modal>
 
 
+
+  // Auto expand sheet
+  useEffect(() => {
+    if (selectedBicycle) {
+      setTimeout(() => bottomSheetRef.current?.expand(), 50);
+    }
+  }, [selectedBicycle]);
+
+  return (
+    <>
+      {/* Geofence Warning Modal */}
+      <Modal visible={showWarning} transparent animationType="fade">
+        <View style={styles.overlay}>
+          <View style={styles.modal}>
+            <Text style={styles.title}>⚠️ Warning</Text>
+            <Text style={styles.text}>
+              You have moved outside the allowed riding area. Please return to the designated zone!
+            </Text>
+          </View>
+        </View>
+      </Modal>
+
+
  
+
 
       <BottomSheet
         ref={bottomSheetRef}
@@ -287,3 +311,49 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
 });
+
+
+// Styles
+const styles = StyleSheet.create({
+  overlay: {
+    flex: 1,
+    backgroundColor: '#00000088',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  modal: {
+    backgroundColor: '#fff',
+    padding: 24,
+    borderRadius: 16,
+    width: '85%',
+    alignItems: 'center',
+  },
+  title: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    marginBottom: 10,
+    color: '#d9534f',
+  },
+  text: {
+    fontSize: 16,
+    textAlign: 'center',
+  },
+  backdrop: {
+    flex: 1,
+    backgroundColor: '#000000aa',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  popup: {
+    backgroundColor: 'white',
+    padding: 24,
+    borderRadius: 12,
+    width: '80%',
+  },
+  summaryTitle: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    marginBottom: 10,
+  },
+});
+

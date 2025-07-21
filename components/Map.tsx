@@ -53,6 +53,7 @@ export default function Map(){
             styleURL="mapbox://styles/mapbox/navigation-night-v1">
             <Camera followZoomLevel={16} followUserLocation />
             <LocationPuck puckBearingEnabled puckBearing="heading" pulsing={{ isEnabled: true }} />
+            
 
         <BicycleMarkers/>
 
