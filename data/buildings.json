@@ -1,0 +1,35 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Library"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [79.901089, 6.795295]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Mechanical Engineering Department"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [79.899021, 6.795933]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Division of Maritime Studies"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [79.899035, 6.796982]
+      }
+    }
+  ]
+}
