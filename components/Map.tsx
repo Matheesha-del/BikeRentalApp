@@ -21,6 +21,7 @@ export default function Map(){
         <MapView style={{flex:1}} styleURL="mapbox://styles/mapbox/navigation-night-v1">
             <Camera followZoomLevel={16} followUserLocation />
             <LocationPuck puckBearingEnabled puckBearing="heading" pulsing={{ isEnabled: true }} />
+            
 
         <BicycleMarkers/>
 
