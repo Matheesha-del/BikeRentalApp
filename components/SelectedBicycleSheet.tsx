@@ -1,4 +1,5 @@
 import BottomSheet, { BottomSheetView } from '@gorhom/bottom-sheet';
+
 import {
   Text,
   View,
@@ -9,6 +10,7 @@ import {
   Vibration,
   StyleSheet,
 } from 'react-native';
+
 import { useEffect, useRef, useState } from 'react';
 import { useBicycle } from '~/providers/BicycleProvider';
 import { Button } from './Button';
@@ -17,20 +19,27 @@ import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import Entypo from '@expo/vector-icons/Entypo';
 
 export default function SelectedBicycleSheet() {
+
   const { selectedBicycle, distance, duration, isNearby, isOutsideGeofence } =
     useBicycle();
+
   const bottomSheetRef = useRef<BottomSheet>(null);
 
   const [journeyStarted, setJourneyStarted] = useState(false);
   const [startTime, setStartTime] = useState<Date | null>(null);
   const [elapsedTime, setElapsedTime] = useState(0);
+
   const [finalElapsedTime, setFinalElapsedTime] = useState(0);
   const [showSummary, setShowSummary] = useState(false);
   const [showPayment, setShowPayment] = useState(false);
   const [showWarning, setShowWarning] = useState(false);
 
+
   const rideMinutes = Math.floor(elapsedTime / 60);
   const charge = rideMinutes >= 20 ? 500 : 100;
+
+
+  // Confirm ride start
 
   const handleStartJourney = () => {
     Alert.alert('Confirm Ride', 'Are you sure you want to start the ride?', [
@@ -45,11 +54,16 @@ export default function SelectedBicycleSheet() {
     ]);
   };
 
+  // When ending the trip
   const handleEndTrip = () => {
+
     setFinalElapsedTime(elapsedTime);
+
     setJourneyStarted(false);
     setShowSummary(true);
   };
+
+  // Reset state when a new bicycle is selected
 
   useEffect(() => {
     if (selectedBicycle) {
@@ -73,6 +87,7 @@ export default function SelectedBicycleSheet() {
   }, [journeyStarted, isOutsideGeofence]);
 
   // Timer
+
   useEffect(() => {
     let timer: NodeJS.Timer;
     if (journeyStarted && startTime) {
@@ -85,6 +100,7 @@ export default function SelectedBicycleSheet() {
 
     return () => clearInterval(timer);
   }, [journeyStarted, startTime]);
+
 
   // Auto expand sheet
   useEffect(() => {
@@ -107,6 +123,10 @@ export default function SelectedBicycleSheet() {
         </View>
       </Modal>
 
+
+  return (
+    <>
+
       <BottomSheet
         ref={bottomSheetRef}
         index={-1}
@@ -119,9 +139,11 @@ export default function SelectedBicycleSheet() {
             <View style={{ flexDirection: 'row', alignItems: 'center', gap: 10 }}>
               <Image source={pin} style={{ width: 80, height: 80 }} />
               <View style={{ flex: 1, gap: 5 }}>
+
                 <Text style={{ color: 'white', fontSize: 20, fontWeight: '600' }}>
                   ECO-FRIENDLY BICYCLE
                 </Text>
+
                 <Text style={{ color: 'gray', fontSize: 18 }}>
                   id-{selectedBicycle.id}. University of Moratuwa
                 </Text>
@@ -130,9 +152,11 @@ export default function SelectedBicycleSheet() {
               <View style={{ gap: 5 }}>
                 <View style={{ flexDirection: 'row', alignItems: 'center', gap: 5 }}>
                   <MaterialCommunityIcons name="map-marker-distance" size={24} color="#59e8f1" />
+
                   <Text style={{ color: 'white', fontSize: 16 }}>
                     {distance?.toFixed(1) ?? '...'}m
                   </Text>
+
                 </View>
 
                 <View style={{ flexDirection: 'row', alignItems: 'center', gap: 5 }}>
@@ -165,10 +189,12 @@ export default function SelectedBicycleSheet() {
 
       {/* Trip Summary Modal */}
       <Modal visible={showSummary} transparent animationType="fade">
+
         <View style={styles.backdrop}>
           <View style={styles.popup}>
             <Text style={styles.summaryTitle}>Trip Summary</Text>
             <Text>Time: {Math.floor(finalElapsedTime / 60)}m {finalElapsedTime % 60}s</Text>
+
             <Text>Charge: LKR {charge}</Text>
             <View style={{ marginTop: 20 }}>
               <Button
@@ -185,9 +211,11 @@ export default function SelectedBicycleSheet() {
 
       {/* Payment Modal */}
       <Modal visible={showPayment} transparent animationType="fade">
+
         <View style={styles.backdrop}>
           <View style={styles.popup}>
             <Text style={styles.summaryTitle}>Select Payment Method</Text>
+
             <View style={{ gap: 10 }}>
               <Button
                 title="VISA"
@@ -215,6 +243,7 @@ export default function SelectedBicycleSheet() {
     </>
   );
 }
+
 
 // Styles
 const styles = StyleSheet.create({
@@ -259,3 +288,4 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
 });
+
