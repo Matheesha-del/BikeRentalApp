@@ -12,6 +12,7 @@ import { point } from '@turf/helpers';
 import booleanPointInPolygon from '@turf/boolean-point-in-polygon';
 import type { FeatureCollection, Polygon } from 'geojson';
 import geofenceDataRaw from '../data/geofencedata.json';
+import { getDatabase, ref, onValue, off } from 'firebase/database';
 
 const geofenceData = geofenceDataRaw as FeatureCollection<Polygon>;
 
@@ -24,12 +25,14 @@ type Bicycle = {
 type BicycleContextType = {
   selectedBicycle: Bicycle | null;
   setSelectedBicycle: (bike: Bicycle) => void;
+  startNavigation: () => Promise<void>;
   direction: any;
   directionCoordinates: [number, number][] | null;
   duration: number | null;
   distance: number | null;
   isNearby: boolean;
   isOutsideGeofence: boolean;
+  isBikeInStation: boolean | null;
 };
 
 const BicycleContext = createContext<BicycleContextType | undefined>(undefined);
@@ -39,8 +42,30 @@ export const BicycleProvider = ({ children }: PropsWithChildren) => {
   const [direction, setDirection] = useState<any>(null);
   const [isNearby, setIsNearby] = useState(false);
   const [isOutsideGeofence, setIsOutsideGeofence] = useState(false);
+  const [isBikeInStation, setIsBikeInStation] = useState<boolean | null>(null);
 
-  // Nearby tracking
+  // ✅ Listen to bike status in Firebase
+  useEffect(() => {
+    if (!selectedBicycle) return;
+
+    const db = getDatabase();
+    const statusRef = ref(db, `bike_status/${selectedBicycle.id}/status`);
+
+    const unsubscribe = onValue(statusRef, (snapshot) => {
+      const status = snapshot.val();
+      if (status === 'in_station') {
+        console.log('✅ Bike is in station');
+        setIsBikeInStation(true);
+      } else {
+        console.log('❌ Bike is not in station');
+        setIsBikeInStation(false);
+      }
+    });
+
+    return () => off(statusRef);
+  }, [selectedBicycle]);
+
+  // ✅ Nearby tracking
   useEffect(() => {
     if (!selectedBicycle) return;
 
@@ -68,75 +93,70 @@ export const BicycleProvider = ({ children }: PropsWithChildren) => {
     };
   }, [selectedBicycle]);
 
-  // ✅ Geofence logic (moved outside)
+  // ✅ Geofence logic
   useEffect(() => {
-  if (!selectedBicycle) return;
+    if (!selectedBicycle) return;
 
-  let subscription: Location.LocationSubscription;
+    let subscription: Location.LocationSubscription;
 
-  const startGeofenceWatcher = async () => {
-    try {
-      subscription = await Location.watchPositionAsync(
-        { distanceInterval: 10 }, // check every 10m movement
-        (newLocation) => {
-          const userLocation = point([
-            selectedBicycle.longitude,
-            selectedBicycle.latitude,
-          ]);
+    const startGeofenceWatcher = async () => {
+      try {
+        subscription = await Location.watchPositionAsync(
+          { distanceInterval: 10 },
+          (newLocation) => {
+            const bikeLocation = point([
+              selectedBicycle.longitude,
+              selectedBicycle.latitude,
+            ]);
 
-          const polygon = geofenceData.features[0];
-          const inside = booleanPointInPolygon(userLocation, polygon);
+            const polygon = geofenceData.features[0];
+            const inside = booleanPointInPolygon(bikeLocation, polygon);
 
-          if (inside) {
-            console.log('✅ User is inside the geofence zone');
-            setIsOutsideGeofence(false);
-          } else {
-            console.log('❌ User is outside the geofence zone');
-            setIsOutsideGeofence(true);
+            setIsOutsideGeofence(!inside);
           }
-        }
-      );
-    } catch (err) {
-      console.error('Geofence watcher failed:', err);
-    }
-  };
+        );
+      } catch (err) {
+        console.error('Geofence watcher failed:', err);
+      }
+    };
 
-  startGeofenceWatcher();
+    startGeofenceWatcher();
 
-  return () => {
-    subscription?.remove(); // clean up when unmount or bike change
-  };
-}, [selectedBicycle]);
+    return () => {
+      subscription?.remove();
+    };
+  }, [selectedBicycle]);
 
+  // ✅ Navigation start function (only called when pressing "Navigate")
+  const startNavigation = async () => {
+    if (!selectedBicycle) return;
 
-  // Directions fetch
-  useEffect(() => {
-    const fetchDirections = async () => {
+    try {
       const myLocation = await Location.getCurrentPositionAsync();
 
       const newDirection = await getDirections(
         [myLocation.coords.longitude, myLocation.coords.latitude],
-        [selectedBicycle!.longitude, selectedBicycle!.latitude]
+        [selectedBicycle.longitude, selectedBicycle.latitude]
       );
       setDirection(newDirection);
-    };
-
-    if (selectedBicycle) {
-      fetchDirections();
+    } catch (err) {
+      console.error('Failed to fetch directions:', err);
     }
-  }, [selectedBicycle]);
+  };
 
   return (
     <BicycleContext.Provider
       value={{
         selectedBicycle,
         setSelectedBicycle,
+        startNavigation, // <-- exposed here
         direction,
         directionCoordinates: direction?.routes?.[0]?.geometry?.coordinates ?? null,
         duration: direction?.routes?.[0]?.duration ?? null,
         distance: direction?.routes?.[0]?.distance ?? null,
         isNearby,
         isOutsideGeofence,
+        isBikeInStation,
       }}
     >
       {children}
