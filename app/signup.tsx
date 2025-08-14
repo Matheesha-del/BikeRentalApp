@@ -25,8 +25,25 @@ export default function Signup() {
     try {
       const userCredential = await createUserWithEmailAndPassword(auth, email, password);
       const user = userCredential.user;
-      Alert.alert('Success', `Account created for ${user.email}`);
-      router.push('./details');
+
+      // Clear the input fields
+      setEmail('');
+      setPassword('');
+
+      Alert.alert(
+        'Success',
+        `Account created for ${user.email}`,
+        [
+          {
+            text: 'OK',
+            onPress: () => {
+              // Navigate to the index page
+              router.push('/');
+            },
+          },
+        ],
+        { cancelable: false }
+      );
     } catch (error: any) {
       Alert.alert('Signup Error', error.message);
     }
@@ -34,7 +51,12 @@ export default function Signup() {
 
   return (
     <>
-      <Stack.Screen options={{ title: 'Sign Up' }} />
+      <Stack.Screen
+        options={{
+          title: 'Sign Up',
+          headerBackVisible: true, // ensure back button is visible
+        }}
+      />
       <Container>
         <View style={styles.container}>
           <Text style={styles.title}>Create a New Account</Text>

@@ -1,10 +1,16 @@
 module.exports = function (api) {
   api.cache(true);
-  const plugins = ['react-native-reanimated/plugin'];
-
   return {
     presets: ['babel-preset-expo'],
-
-    plugins,
+    plugins: [
+      [
+        'module-resolver',
+        {
+          alias: {
+            '~': './', // this matches tsconfig baseUrl
+          },
+        },
+      ],
+    ],
   };
 };

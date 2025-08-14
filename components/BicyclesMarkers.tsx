@@ -1,5 +1,4 @@
 import { useEffect, useState } from 'react';
-
 import { ShapeSource, Images, CircleLayer, SymbolLayer, FillLayer, LineLayer } from "@rnmapbox/maps";
 import { OnPressEvent } from '@rnmapbox/maps/lib/typescript/src/types/OnPressEvent';
 import pin from '~/assets/pin.png';
@@ -7,7 +6,6 @@ import { featureCollection, point } from '@turf/helpers';
 import { useBicycle } from '~/providers/BicycleProvider';
 import { database } from '~/utils/firebase'; 
 import { onValue, ref } from 'firebase/database';
-
 import geofenceData from '~/data/geofencedata.json'; // adjust path if needed
 
 export default function BicycleMarkers() {
